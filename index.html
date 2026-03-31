@@ -111,16 +111,6 @@
             border-color: var(--accent);
         }
 
-        .pulse-icon {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.05); opacity: 1; }
-            100% { transform: scale(0.95); opacity: 0.8; }
-        }
-
         .hero-zoom {
             animation: slowZoom 20s infinite alternate linear;
         }
@@ -129,8 +119,6 @@
             from { transform: scale(1); }
             to { transform: scale(1.15); }
         }
-
-        .hidden-field { display: none !important; visibility: hidden !important; }
     </style>
 </head>
 <body class="overflow-x-hidden selection:bg-rose-100 selection:text-rose-900">
@@ -142,7 +130,6 @@
             <div class="hidden md:flex space-x-10 text-[10px] uppercase tracking-[0.3em] font-bold opacity-60">
                 <a href="#story" class="hover:text-[#722F37] transition">Our Story</a>
                 <a href="#details" class="hover:text-[#722F37] transition">Details</a>
-                <a href="#gallery" class="hover:text-[#722F37] transition">Gallery</a>
                 <a href="#rsvp" class="hover:text-[#722F37] transition">RSVP</a>
             </div>
             <button id="mobile-menu-btn" aria-label="Toggle Menu" class="md:hidden text-[#722F37] p-2">
@@ -152,7 +139,6 @@
         <div id="mobile-menu" class="hidden fixed inset-0 top-20 bg-[#F9F7F2] z-40 p-8 flex-col space-y-8 text-center md:hidden">
             <a href="#story" class="text-xs uppercase tracking-widest font-bold">Our Story</a>
             <a href="#details" class="text-xs uppercase tracking-widest font-bold">Details</a>
-            <a href="#gallery" class="text-xs uppercase tracking-widest font-bold">Gallery</a>
             <a href="#rsvp" class="text-xs uppercase tracking-widest font-bold">RSVP</a>
         </div>
     </nav>
@@ -237,17 +223,17 @@
         <div class="max-w-xl mx-auto">
             <div class="text-center mb-20 reveal">
                 <h2 class="text-5xl serif text-[#722F37] mb-6 italic">R.S.V.P</h2>
-                <p class="text-gray-500 font-light italic">Kindly respond as soon as possible to secure your electronic invitation.</p>
+                <p class="text-gray-500 font-light italic">Kindly respond to secure your electronic invitation.</p>
             </div>
 
             <form id="rsvp-form" action="https://formspree.io/f/mojpdlnn" method="POST" class="space-y-12 reveal">
                 <div class="relative">
                     <label class="text-[8px] uppercase tracking-[0.3em] font-bold text-gray-400 block mb-2">Guest Name</label>
-                    <input type="text" id="guest-name" name="name" required class="w-full input-minimal text-lg font-light" placeholder="First & Last Name">
+                    <input type="text" id="guest-name" name="name" required class="w-full input-minimal text-lg font-light" placeholder="">
                 </div>
                 <div class="relative">
-                    <label class="text-[8px] uppercase tracking-[0.3em] font-bold text-gray-400 block mb-2">Contact</label>
-                    <input type="tel" id="guest-phone" name="phone" required class="w-full input-minimal text-lg font-light" placeholder="080...">
+                    <label class="text-[8px] uppercase tracking-[0.3em] font-bold text-gray-400 block mb-2">Phone Number</label>
+                    <input type="tel" id="guest-phone" name="phone" required class="w-full input-minimal text-lg font-light" placeholder="">
                 </div>
                 <div class="flex space-x-12">
                     <label class="flex items-center cursor-pointer group">
@@ -263,6 +249,11 @@
                 </div>
                 <button type="submit" id="submit-btn" class="w-full btn-primary mt-12 py-5 shadow-xl">Confirm RSVP</button>
             </form>
+
+            <div id="duplicate-msg" class="hidden text-center p-12 bg-white border border-rose-100 shadow-sm reveal active">
+                <p class="serif text-3xl text-[#722F37] mb-4 italic">Response Already Sent</p>
+                <p class="text-gray-500 font-light">We have already received a response for this contact. Thank you!</p>
+            </div>
 
             <div id="rsvp-success" class="hidden text-center p-16 bg-white border border-gray-100 shadow-sm reveal active">
                 <p class="cursive text-5xl text-[#722F37] mb-6">Thank You</p>
@@ -290,10 +281,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-        // IMPORTANT: REPLACE THE OBJECT BELOW WITH YOUR ACTUAL FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -303,16 +293,30 @@
             appId: "YOUR_APP_ID"
         };
 
-        const app = initializeApp(firebaseConfig);
+        const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : firebaseConfig;
+        const app = initializeApp(config);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = 'wedding-daniels-2026'; // Unique ID for your data path
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'wedding-daniels-2026';
 
         const rsvpForm = document.getElementById('rsvp-form');
         const successDiv = document.getElementById('rsvp-success');
+        const duplicateDiv = document.getElementById('duplicate-msg');
         const submitBtn = document.getElementById('submit-btn');
 
-        signInAnonymously(auth).catch(err => console.error("Firebase Auth failed. Check your config."));
+        // Robust Auth Init to fix "Firebase Auth failed" error
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Firebase Auth initialization failed. Verify config and ensure Auth is enabled in console.", err);
+            }
+        };
+        initAuth();
 
         rsvpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -321,17 +325,34 @@
             const attendance = document.querySelector('input[name="attendance"]:checked').value;
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Checking...';
 
             try {
-                // Save to Firebase
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'responses'), {
+                // Check duplication locally via all docs to avoid complex indexing
+                const responsesRef = collection(db, 'artifacts', appId, 'public', 'data', 'responses');
+                const querySnapshot = await getDocs(responsesRef);
+                const isDuplicate = querySnapshot.docs.some(doc => doc.data().phone === phone);
+
+                if (isDuplicate) {
+                    rsvpForm.classList.add('hidden');
+                    duplicateDiv.classList.remove('hidden');
+                    return;
+                }
+
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+
+                // Save to Firestore
+                await addDoc(responsesRef, {
                     name, phone, attendance, timestamp: serverTimestamp()
                 });
 
-                // Also send email via Formspree
+                // Silent Formspree submission to prevent redirect
                 const formData = new FormData(rsvpForm);
-                await fetch(rsvpForm.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+                await fetch(rsvpForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
 
                 rsvpForm.classList.add('hidden');
                 successDiv.classList.remove('hidden');
