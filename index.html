@@ -1,107 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Faith & Kenneth | #BecomingTheDaniels</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faith & Kenneth | #BecomingTheDaniels</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #722F37;
+            --secondary: #2D5A27;
+            --bg-light: #F9F7F2;
+            --text-main: #2D2D2D;
+        }
 
-<script src="https://cdn.tailwindcss.com"></script>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&family=Montserrat&family=Great+Vibes&display=swap" rel="stylesheet">
+        h1, h2, h3, .serif {
+            font-family: 'Cormorant Garamond', serif;
+        }
 
-<style>
-:root {
---accent: #722F37;
---secondary: #2D5A27;
---bg-light: #F9F7F2;
-}
+        .cursive {
+            font-family: 'Great Vibes', cursive;
+        }
 
-body { font-family: 'Montserrat', sans-serif; background: var(--bg-light); }
-h1,h2 { font-family: 'Cormorant Garamond', serif; }
-.cursive { font-family: 'Great Vibes', cursive; }
+        .glass-nav {
+            background: rgba(249, 247, 242, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(114, 47, 55, 0.05);
+        }
 
-.reveal { opacity:0; transform:translateY(20px); transition:.8s; }
-.reveal.active { opacity:1; transform:translateY(0); }
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
 
-.btn-primary {
-background: var(--accent);
-color:#fff;
-padding:1rem;
-width:100%;
-}
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-.contact-card {
-background:#fff;
-padding:1.5rem;
-width:240px;
-border:1px solid #eee;
-}
-</style>
+        .input-minimal {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #D1D1D1;
+            border-radius: 0;
+            padding: 0.75rem 0;
+            transition: all 0.3s;
+        }
+
+        .input-minimal:focus {
+            outline: none;
+            border-bottom-color: var(--accent);
+            padding-left: 4px;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .btn-primary:disabled {
+            background-color: #a3a3a3;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 2px solid #fff;
+            width: 14px;
+            height: 14px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .contact-card {
+            background: white;
+            border: 1px solid rgba(114, 47, 55, 0.1);
+            padding: 1.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 240px;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(114, 47, 55, 0.08);
+            border-color: var(--accent);
+        }
+
+        .pulse-icon {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        .hero-zoom {
+            animation: slowZoom 20s infinite alternate linear;
+        }
+
+        @keyframes slowZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.15); }
+        }
+
+        .hidden-field { display: none !important; visibility: hidden !important; }
+    </style>
 </head>
+<body class="overflow-x-hidden selection:bg-rose-100 selection:text-rose-900">
 
-<body>
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <a href="#" class="cursive text-3xl text-[#722F37]">F & K</a>
+            <div class="hidden md:flex space-x-10 text-[10px] uppercase tracking-[0.3em] font-bold opacity-60">
+                <a href="#story" class="hover:text-[#722F37] transition">Our Story</a>
+                <a href="#details" class="hover:text-[#722F37] transition">Details</a>
+                <a href="#gallery" class="hover:text-[#722F37] transition">Gallery</a>
+                <a href="#rsvp" class="hover:text-[#722F37] transition">RSVP</a>
+            </div>
+            <button id="mobile-menu-btn" aria-label="Toggle Menu" class="md:hidden text-[#722F37] p-2">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h16M4 16h16"/></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden fixed inset-0 top-20 bg-[#F9F7F2] z-40 p-8 flex-col space-y-8 text-center md:hidden">
+            <a href="#story" class="text-xs uppercase tracking-widest font-bold">Our Story</a>
+            <a href="#details" class="text-xs uppercase tracking-widest font-bold">Details</a>
+            <a href="#gallery" class="text-xs uppercase tracking-widest font-bold">Gallery</a>
+            <a href="#rsvp" class="text-xs uppercase tracking-widest font-bold">RSVP</a>
+        </div>
+    </nav>
 
-<!-- HERO -->
-<header class="h-screen flex items-center justify-center text-center text-white relative">
-<img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2000"
-class="absolute w-full h-full object-cover">
-<div class="absolute inset-0 bg-black/50"></div>
+    <!-- Hero -->
+    <header class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover hero-zoom" alt="Wedding Hero">
+            <div class="absolute inset-0 bg-black/40"></div>
+        </div>
+        <div class="relative z-10 text-center text-white px-4">
+            <p class="text-[10px] md:text-xs uppercase tracking-[0.6em] mb-6 opacity-80">Together with their families</p>
+            <h1 class="text-5xl md:text-9xl font-light mb-8 serif">Faith <span class="italic">&</span> Kenneth</h1>
+            <div class="flex items-center justify-center space-x-6 mb-8">
+                <div class="h-[1px] w-8 md:w-16 bg-white/30"></div>
+                <p class="text-xs md:text-sm tracking-[0.4em] uppercase font-light">June 27, 2026</p>
+                <div class="h-[1px] w-8 md:w-16 bg-white/30"></div>
+            </div>
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Faith+%26+Kenneth+Wedding&dates=20260627T100000Z/20260627T160000Z&details=Becoming+The+Daniels+Wedding+Celebration&location=Grace+Hall,+MFM+International+HQ,+Lagos" target="_blank" class="text-[9px] uppercase tracking-[0.3em] font-bold border border-white/20 px-6 py-3 hover:bg-white hover:text-black transition inline-block mb-8">Save the Date</a>
+            <p class="block cursive text-2xl md:text-4xl text-rose-100 opacity-90">#BecomingTheDaniels</p>
+        </div>
+    </header>
 
-<div class="relative z-10">
-<h1 class="text-5xl md:text-8xl">Faith & Kenneth</h1>
-<p class="mt-4">June 27, 2026</p>
-</div>
-</header>
+    <!-- Story -->
+    <section id="story" class="py-32 px-6 bg-[#F9F7F2]">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 md:gap-24 items-center">
+            <div class="reveal">
+                <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1200" class="shadow-2xl w-full rounded-sm" alt="The Couple">
+            </div>
+            <div class="reveal" style="transition-delay: 200ms;">
+                <span class="text-[9px] uppercase tracking-[0.4em] text-gray-400 mb-4 block font-bold">Our Story</span>
+                <h2 class="text-5xl serif text-[#722F37] mb-8 italic">The Journey</h2>
+                <div class="space-y-6 text-gray-600 font-light leading-relaxed text-lg">
+                    <p>What started as a shared vision blossomed into a beautiful reality. Over the years, we've built a friendship that serves as the bedrock of our commitment.</p>
+                    <p>Through every milestone, we've seen God's faithfulness, and we are eager to enter this new season with you in attendance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- RSVP -->
-<section class="p-10 max-w-xl mx-auto">
+    <!-- Details -->
+    <section id="details" class="py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-5xl serif text-[#722F37] mb-4 italic">The Occasion</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-px bg-gray-100 border border-gray-100 shadow-sm">
+                <div class="bg-white p-12 md:p-24 text-center reveal">
+                    <h3 class="text-[10px] uppercase tracking-[0.3em] text-[#2D5A27] font-bold mb-6">Wedding Ceremony</h3>
+                    <p class="text-4xl serif mb-4 italic text-[#722F37]">10:00 AM</p>
+                    <p class="text-gray-500 font-light mb-10 leading-relaxed">Grace Hall, MFM International HQ<br>Beside Unilag Second Gate, Lagos</p>
+                    <a href="https://maps.google.com/?q=MFM+International+Headquarters+Lagos" target="_blank" class="text-[9px] uppercase tracking-[0.3em] font-bold border-b border-[#722F37] pb-2 text-[#722F37] hover:opacity-50 transition">Google Maps</a>
+                </div>
+                <div class="bg-white p-12 md:p-24 text-center reveal" style="transition-delay: 150ms;">
+                    <h3 class="text-[10px] uppercase tracking-[0.3em] text-[#722F37] font-bold mb-6">Wedding Reception</h3>
+                    <p class="text-4xl serif mb-4 italic text-[#2D5A27]">01:00 PM</p>
+                    <p class="text-gray-500 font-light mb-10 leading-relaxed">Canopy Hall, MFM International HQ<br>13, Olasimbo Street, Onike, Yaba</p>
+                    <a href="https://maps.google.com/?q=13+Olasimbo+Street+Onike+Yaba+Lagos" target="_blank" class="text-[9px] uppercase tracking-[0.3em] font-bold border-b border-[#2D5A27] pb-2 text-[#2D5A27] hover:opacity-50 transition">Google Maps</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<h2 class="text-3xl mb-6 text-center">RSVP</h2>
+    <!-- Registry -->
+    <section class="py-32 px-6 bg-[#2D5A27] text-white">
+        <div class="max-w-4xl mx-auto text-center reveal">
+            <h2 class="text-4xl md:text-6xl serif mb-8 italic">Gift Registry</h2>
+            <div class="bg-white/5 border border-white/10 p-10 md:p-16 rounded-sm inline-block w-full max-w-md text-left shadow-2xl backdrop-blur-sm">
+                <div class="space-y-8">
+                    <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Institution</span><p class="text-xl font-light">Ecobank</p></div>
+                    <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Account Name</span><p class="text-xl font-light">Kenneth Daniel</p></div>
+                    <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Account Number</span><p class="text-5xl font-light tracking-tighter text-rose-100" id="account-num">2461224314</p></div>
+                </div>
+                <button onclick="copyAccount()" class="mt-12 w-full py-4 border border-white/20 hover:bg-white hover:text-[#2D5A27] transition uppercase text-[9px] tracking-widest font-bold">Copy Information</button>
+                <p id="copy-msg" class="text-center mt-4 text-[9px] uppercase tracking-widest text-rose-200 opacity-0 transition-opacity">Details copied</p>
+            </div>
+        </div>
+    </section>
 
-<form id="form" action="https://formspree.io/f/mojpdlnn" method="POST">
+    <!-- RSVP -->
+    <section id="rsvp" class="py-32 px-6 bg-[#F9F7F2] border-t border-gray-100">
+        <div class="max-w-xl mx-auto">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-5xl serif text-[#722F37] mb-6 italic">R.S.V.P</h2>
+                <p class="text-gray-500 font-light italic">Kindly respond as soon as possible to secure your electronic invitation.</p>
+            </div>
 
-<input name="name" required placeholder="Full Name" class="w-full mb-4 p-3 border">
-<input name="phone" required placeholder="Phone Number" class="w-full mb-4 p-3 border">
+            <form id="rsvp-form" action="https://formspree.io/f/mojpdlnn" method="POST" class="space-y-12 reveal">
+                <div class="relative">
+                    <label class="text-[8px] uppercase tracking-[0.3em] font-bold text-gray-400 block mb-2">Guest Name</label>
+                    <input type="text" id="guest-name" name="name" required class="w-full input-minimal text-lg font-light" placeholder="First & Last Name">
+                </div>
+                <div class="relative">
+                    <label class="text-[8px] uppercase tracking-[0.3em] font-bold text-gray-400 block mb-2">Contact</label>
+                    <input type="tel" id="guest-phone" name="phone" required class="w-full input-minimal text-lg font-light" placeholder="080...">
+                </div>
+                <div class="flex space-x-12">
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="radio" name="attendance" value="Accepts" class="hidden peer" checked>
+                        <div class="w-4 h-4 rounded-full border-2 border-gray-200 peer-checked:border-[#722F37] peer-checked:bg-[#722F37] transition mr-3"></div>
+                        <span class="text-[10px] uppercase tracking-widest font-bold opacity-40 peer-checked:opacity-100">Accepts</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="radio" name="attendance" value="Declines" class="hidden peer">
+                        <div class="w-4 h-4 rounded-full border-2 border-gray-200 peer-checked:border-[#722F37] peer-checked:bg-[#722F37] transition mr-3"></div>
+                        <span class="text-[10px] uppercase tracking-widest font-bold opacity-40 peer-checked:opacity-100">Declines</span>
+                    </label>
+                </div>
+                <button type="submit" id="submit-btn" class="w-full btn-primary mt-12 py-5 shadow-xl">Confirm RSVP</button>
+            </form>
 
-<select name="attendance" class="w-full mb-6 p-3 border">
-<option value="Accepts">Accepts</option>
-<option value="Declines">Declines</option>
-</select>
+            <div id="rsvp-success" class="hidden text-center p-16 bg-white border border-gray-100 shadow-sm reveal active">
+                <p class="cursive text-5xl text-[#722F37] mb-6">Thank You</p>
+                <p id="success-status" class="text-gray-500 font-light">We have received the response for <span id="saved-name" class="font-bold text-[#2D5A27]"></span>.</p>
+            </div>
+            
+            <!-- Contact Assist -->
+            <div class="mt-24 pt-16 border-t border-gray-200 text-center reveal">
+                <p class="text-[9px] uppercase tracking-[0.4em] text-gray-400 mb-10 font-bold">Need Assistance? Click to chat with us</p>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                    <a href="https://wa.me/2348162749018?text=Hi%20Emmanuel,%20I'm%20inquiring%20about%20Faith%20and%20Kenneth's%20wedding." target="_blank" class="contact-card group">
+                        <p class="serif italic text-2xl text-[#722F37] mb-1">Emmanuel</p>
+                        <p class="text-[10px] tracking-[0.2em] text-gray-500 font-bold mb-3">0816 274 9018</p>
+                        <span class="text-[9px] uppercase tracking-[0.2em] font-bold text-gray-300 border border-gray-100 px-4 py-1.5 rounded-full group-hover:border-[#25D366] group-hover:text-[#25D366] transition">Chat with us</span>
+                    </a>
+                    <a href="https://wa.me/2348107661118?text=Hi%20Opeyemi,%20I'm%20inquiring%20about%20Faith%20and%20Kenneth's%20wedding." target="_blank" class="contact-card group">
+                        <p class="serif italic text-2xl text-[#722F37] mb-1">Opeyemi</p>
+                        <p class="text-[10px] tracking-[0.2em] text-gray-500 font-bold mb-3">0810 766 1118</p>
+                        <span class="text-[9px] uppercase tracking-[0.2em] font-bold text-gray-300 border border-gray-100 px-4 py-1.5 rounded-full group-hover:border-[#25D366] group-hover:text-[#25D366] transition">Chat with us</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<button class="btn-primary">Submit RSVP</button>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-</form>
+        // IMPORTANT: REPLACE THE OBJECT BELOW WITH YOUR ACTUAL FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_ID",
+            appId: "YOUR_APP_ID"
+        };
 
-<p id="msg" class="text-center mt-4"></p>
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = 'wedding-daniels-2026'; // Unique ID for your data path
 
-</section>
+        const rsvpForm = document.getElementById('rsvp-form');
+        const successDiv = document.getElementById('rsvp-success');
+        const submitBtn = document.getElementById('submit-btn');
 
-<script>
+        signInAnonymously(auth).catch(err => console.error("Firebase Auth failed. Check your config."));
 
-// FORM SUBMIT
-const form = document.getElementById('form');
-const msg = document.getElementById('msg');
+        rsvpForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('guest-name').value.trim();
+            const phone = document.getElementById('guest-phone').value.trim();
+            const attendance = document.querySelector('input[name="attendance"]:checked').value;
 
-form.addEventListener('submit', async (e)=>{
-e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
 
-const data = new FormData(form);
+            try {
+                // Save to Firebase
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'responses'), {
+                    name, phone, attendance, timestamp: serverTimestamp()
+                });
 
-const res = await fetch(form.action,{
-method:'POST',
-body:data,
-headers:{'Accept':'application/json'}
-});
+                // Also send email via Formspree
+                const formData = new FormData(rsvpForm);
+                await fetch(rsvpForm.action, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
 
-if(res.ok){
-msg.innerHTML = "✅ RSVP Sent Successfully!";
-form.reset();
-}else{
-msg.innerHTML = "❌ Error sending RSVP";
-}
-});
+                rsvpForm.classList.add('hidden');
+                successDiv.classList.remove('hidden');
+                document.getElementById('saved-name').textContent = name;
+            } catch (error) {
+                console.error("Submission error:", error);
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Error - Try Again';
+            }
+        });
 
-</script>
+        // UI Reveal logic
+        const reveal = () => {
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
+            });
+        };
+        window.addEventListener('scroll', reveal);
+        window.onload = reveal;
 
+        // Mobile Menu
+        document.getElementById('mobile-menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        
+        // Copy Account
+        window.copyAccount = () => {
+            const el = document.createElement('textarea');
+            el.value = `Ecobank | Kenneth Daniel | 2461224314`;
+            document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
+            document.getElementById('copy-msg').style.opacity = '1';
+            setTimeout(() => document.getElementById('copy-msg').style.opacity = '0', 2000);
+        };
+    </script>
 </body>
 </html>
