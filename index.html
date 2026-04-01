@@ -126,6 +126,15 @@
             background-color: rgba(114, 47, 55, 0.2);
             margin: 0 12px;
         }
+
+        .wishlist-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
     </style>
 </head>
 <body class="overflow-x-hidden selection:bg-rose-100 selection:text-rose-900">
@@ -219,16 +228,48 @@
 
     <!-- Registry -->
     <section id="registry" class="py-32 px-6 bg-[#2D5A27] text-white">
-        <div class="max-w-4xl mx-auto text-center reveal">
-            <h2 class="text-4xl md:text-6xl serif mb-8 italic">Gift Registry</h2>
-            <div class="bg-white/5 border border-white/10 p-10 md:p-16 rounded-sm inline-block w-full max-w-md text-left shadow-2xl backdrop-blur-sm">
-                <div class="space-y-8">
-                    <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Institution</span><p class="text-xl font-light">Ecobank</p></div>
-                    <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Account Name</span><p class="text-xl font-light">Kenneth Daniel</p></div>
-                    <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Account Number</span><p class="text-5xl font-light tracking-tighter text-rose-100" id="account-num">2461224314</p></div>
+        <div class="max-w-6xl mx-auto reveal">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl serif mb-4 italic">Gift Registry</h2>
+                <p class="text-rose-100 font-light tracking-widest uppercase text-[10px]">Your presence is our greatest gift, but should you wish to honor us further...</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-stretch">
+                <!-- Monetary Gifts -->
+                <div class="bg-white/5 border border-white/10 p-10 md:p-12 rounded-sm shadow-2xl backdrop-blur-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-10 opacity-60">Monetary Contributions</h3>
+                        <div class="space-y-8">
+                            <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Institution</span><p class="text-xl font-light">Ecobank</p></div>
+                            <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Account Name</span><p class="text-xl font-light">Kenneth Daniel</p></div>
+                            <div><span class="text-[8px] uppercase tracking-[0.2em] opacity-40 block mb-2">Account Number</span><p class="text-5xl font-light tracking-tighter text-rose-100" id="account-num">2461224314</p></div>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="copyAccount()" class="mt-12 w-full py-4 border border-white/20 hover:bg-white hover:text-[#2D5A27] transition uppercase text-[9px] tracking-widest font-bold">Copy Information</button>
+                        <p id="copy-msg" class="text-center mt-4 text-[9px] uppercase tracking-widest text-rose-200 opacity-0 transition-opacity">Details copied</p>
+                    </div>
                 </div>
-                <button onclick="copyAccount()" class="mt-12 w-full py-4 border border-white/20 hover:bg-white hover:text-[#2D5A27] transition uppercase text-[9px] tracking-widest font-bold">Copy Information</button>
-                <p id="copy-msg" class="text-center mt-4 text-[9px] uppercase tracking-widest text-rose-200 opacity-0 transition-opacity">Details copied</p>
+
+                <!-- Physical Gifts -->
+                <div class="bg-white/5 border border-white/10 p-10 md:p-12 rounded-sm shadow-2xl backdrop-blur-sm">
+                    <h3 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-10 opacity-60">Physical Gift Wishlist</h3>
+                    <!-- 3x3 Grid for Wishlist Items -->
+                    <div class="grid grid-cols-3 gap-y-4 gap-x-2 text-center">
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Air Fryer</span></div>
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Microwave</span></div>
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Blender</span></div>
+                        
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Washing Machine</span></div>
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Water Dispenser</span></div>
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Ceramic Pot</span></div>
+                        
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Dinner Set</span></div>
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Refrigerator</span></div>
+                        <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Car</span></div>
+                    </div>
+                    <p class="mt-12 text-[9px] uppercase tracking-widest opacity-40 italic text-center">Please contact us below to coordinate delivery of physical items.</p>
+                </div>
             </div>
         </div>
     </section>
