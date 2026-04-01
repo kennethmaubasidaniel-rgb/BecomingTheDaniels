@@ -30,7 +30,7 @@
         }
 
         .glass-nav {
-            background: rgba(249, 247, 242, 0.9);
+            background: rgba(249, 247, 242, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(114, 47, 55, 0.05);
         }
@@ -70,6 +70,10 @@
             font-weight: 600;
             transition: all 0.4s;
             cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
         }
 
         .btn-primary:disabled {
@@ -126,6 +130,24 @@
             from { transform: scale(1); }
             to { transform: scale(1.1); }
         }
+
+        .map-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            font-weight: 600;
+            border-bottom: 1px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .map-link:hover {
+            border-bottom-color: var(--accent);
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -134,6 +156,8 @@
     <nav class="fixed top-0 w-full z-50 glass-nav">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <a href="#" class="cursive text-3xl text-[#722F37]">F & K</a>
+            
+            <!-- Horizontal Menu (Desktop) -->
             <div class="hidden md:flex items-center text-[9px] uppercase tracking-[0.2em] font-bold opacity-70">
                 <a href="#story" class="hover:text-[#722F37] transition">Our Story</a>
                 <span class="mx-4 text-gray-300">|</span>
@@ -145,16 +169,22 @@
                 <span class="mx-4 text-gray-300">|</span>
                 <a href="#contact" class="hover:text-[#722F37] transition">Contact</a>
             </div>
+
+            <!-- Mobile Menu Toggler -->
             <button id="mobile-menu-btn" class="md:hidden text-[#722F37]">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h16M4 16h16"/></svg>
             </button>
         </div>
-        <div id="mobile-menu" class="hidden fixed inset-0 top-20 bg-[#F9F7F2] z-40 p-8 flex flex-col space-y-8 text-center md:hidden">
-            <a href="#story" class="mobile-link text-xs uppercase tracking-widest font-bold">Our Story</a>
-            <a href="#details" class="mobile-link text-xs uppercase tracking-widest font-bold">Details</a>
-            <a href="#rsvp" class="mobile-link text-xs uppercase tracking-widest font-bold">RSVP</a>
-            <a href="#registry" class="mobile-link text-xs uppercase tracking-widest font-bold">Gift Registry</a>
-            <a href="#contact" class="mobile-link text-xs uppercase tracking-widest font-bold">Contact</a>
+
+        <!-- Horizontal Mobile Menu -->
+        <div id="mobile-menu" class="hidden absolute top-20 left-0 w-full bg-[#F9F7F2] border-b border-gray-100 py-4 overflow-x-auto">
+            <div class="flex items-center justify-start space-x-8 px-6 min-w-max">
+                <a href="#story" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap">Our Story</a>
+                <a href="#details" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap">Details</a>
+                <a href="#rsvp" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap">RSVP</a>
+                <a href="#registry" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap">Registry</a>
+                <a href="#contact" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap">Contact</a>
+            </div>
         </div>
     </nav>
 
@@ -167,15 +197,31 @@
         <div class="relative z-10 text-center text-white px-4">
             <p class="text-[10px] md:text-xs uppercase tracking-[0.6em] mb-6 opacity-80">We're getting married</p>
             <h1 class="text-5xl md:text-9xl font-light mb-8 serif">Faith <span class="italic">&</span> Kenneth</h1>
-            <div class="flex items-center justify-center space-x-6 mb-8">
+            <div class="flex items-center justify-center space-x-6 mb-10">
                 <div class="h-[1px] w-8 md:w-16 bg-white/30"></div>
                 <p class="text-xs md:text-sm tracking-[0.4em] uppercase font-light">June 27, 2026</p>
                 <div class="h-[1px] w-8 md:w-16 bg-white/30"></div>
             </div>
-            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Faith+%26+Kenneth+Wedding&dates=20260627T100000Z/20260627T160000Z&details=Becoming+The+Daniels+Wedding+Celebration&location=Grace+Hall,+MFM+International+HQ,+Lagos" target="_blank" class="text-[9px] uppercase tracking-[0.3em] font-bold border border-white/20 px-6 py-3 hover:bg-white hover:text-black transition inline-block mb-8">Save the Date</a>
-            <p class="block cursive text-2xl md:text-4xl text-rose-100 opacity-90">#BecomingTheDaniels</p>
+            
+            <div class="flex flex-col items-center gap-6">
+                <a href="#rsvp" class="btn-primary inline-block transition-colors duration-500">Reserve Your Spot</a>
+                <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Faith+%26+Kenneth+Wedding&dates=20260627T100000Z/20260627T160000Z&details=Becoming+The+Daniels+Wedding+Celebration&location=Grace+Hall,+MFM+International+HQ,+Lagos" target="_blank" class="text-[9px] uppercase tracking-[0.3em] font-bold border border-white/20 px-6 py-3 hover:bg-white hover:text-black transition inline-block">Save the Date</a>
+            </div>
+            
+            <p class="block cursive text-2xl md:text-4xl text-rose-100 opacity-90 mt-8">#BecomingTheDaniels</p>
         </div>
     </header>
+
+    <!-- Welcome Section -->
+    <section class="py-24 bg-white px-6">
+        <div class="max-w-3xl mx-auto text-center reveal">
+            <h2 class="text-4xl md:text-5xl serif text-[#722F37] mb-8 italic">Welcome</h2>
+            <p class="text-gray-600 font-light leading-relaxed text-lg md:text-xl">
+                We are so excited to celebrate our special day with the people we love most. Your presence in our lives has been a blessing, and we can't wait to share this new beginning with you.
+            </p>
+            <div class="mt-10 h-px w-20 bg-[#722F37]/20 mx-auto"></div>
+        </div>
+    </section>
 
     <!-- Story -->
     <section id="story" class="py-32 px-6">
@@ -187,8 +233,9 @@
                 <span class="text-[9px] uppercase tracking-[0.4em] text-gray-400 mb-4 block font-bold">Our Story</span>
                 <h2 class="text-5xl serif text-[#722F37] mb-8 italic">The Journey</h2>
                 <div class="space-y-6 text-gray-600 font-light leading-relaxed text-lg mb-6">
-                    <p>What started as a shared vision blossomed into a beautiful reality. Over the years, we've built a friendship that serves as the bedrock of our commitment.</p>
-                    <p>Through every milestone, we've seen God's faithfulness, and we are eager to enter this new season with you by our side.</p>
+                    <p>I was just trying to message a friend on WhatsApp… but somehow, I texted the wrong person. Or so I thought. 😄</p>
+                    <p>What I didn’t know was that you had switched your display picture, and that “mistake” turned into a conversation I never wanted to end. Turns out, it wasn’t a wrong message at all; it was the right one, sent at the perfect time, to the person I was meant to find. ❤️</p>
+                    <p>Every step brought us closer, every moment shaped our story, and now, we can’t wait to begin this next chapter together as one.</p>
                 </div>
                 <p class="text-gray-600 font-light leading-relaxed text-lg italic">#BecomingTheDaniels</p>
             </div>
@@ -206,11 +253,34 @@
                     <h3 class="text-[10px] uppercase tracking-[0.3em] text-[#2D5A27] font-bold mb-6">Ceremony</h3>
                     <p class="text-4xl serif mb-4 italic text-[#722F37]">10:00 AM</p>
                     <p class="text-gray-500 font-light">Grace Hall, MFM International HQ<br>Beside Unilag Second Gate, Lagos</p>
+                    <a href="https://maps.app.goo.gl/vJcM89yPqX2G1u3t8" target="_blank" class="map-link">
+                        <svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        View on Map
+                    </a>
                 </div>
                 <div class="p-12 text-center border border-gray-100 reveal">
                     <h3 class="text-[10px] uppercase tracking-[0.3em] text-[#722F37] font-bold mb-6">Reception</h3>
                     <p class="text-4xl serif mb-4 italic text-[#2D5A27]">01:00 PM</p>
                     <p class="text-gray-500 font-light">Canopy Hall, MFM International HQ<br>13, Olasimbo Street, Onike, Yaba</p>
+                    <a href="https://maps.app.goo.gl/vJcM89yPqX2G1u3t8" target="_blank" class="map-link">
+                        <svg class="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        View on Map
+                    </a>
+                </div>
+            </div>
+
+            <!-- Color of the Day -->
+            <div class="mt-24 text-center reveal">
+                <h3 class="text-[10px] uppercase tracking-[0.4em] text-gray-400 font-bold mb-8">Colors of the Day</h3>
+                <div class="flex justify-center items-center gap-8">
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full shadow-lg mb-3" style="background-color: #722F37;"></div>
+                        <span class="text-[10px] uppercase tracking-widest font-bold text-gray-500">Wine</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-full shadow-lg mb-3" style="background-color: #2D5A27;"></div>
+                        <span class="text-[10px] uppercase tracking-widest font-bold text-gray-500">Green</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -329,7 +399,6 @@
         const submitBtn = document.getElementById('submit-btn');
         const savedNameSpan = document.getElementById('saved-name');
 
-        // Check if user already submitted (LocalStorage Lock)
         window.onload = () => {
             const hasRSVPed = localStorage.getItem('weddingRSVP_Daniels2026');
             if (hasRSVPed) {
@@ -338,13 +407,11 @@
                 savedNameSpan.textContent = hasRSVPed;
             }
             
-            // Trigger reveals
             document.querySelectorAll('.reveal').forEach(el => {
                 if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('active');
             });
         };
 
-        // Formspree AJAX Submission
         rsvpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = document.getElementById('guest-name').value;
@@ -376,7 +443,6 @@
             }
         });
 
-        // Reveal Logic
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('active');
@@ -385,11 +451,23 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Navigation
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
-        mobileBtn.onclick = () => mobileMenu.classList.toggle('hidden');
-        document.querySelectorAll('.mobile-link').forEach(l => l.onclick = () => mobileMenu.classList.add('hidden'));
+        mobileBtn.onclick = (e) => {
+            e.stopPropagation();
+            mobileMenu.classList.toggle('hidden');
+        };
+
+        // Close menu on click outside
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(l => {
+            l.onclick = () => mobileMenu.classList.add('hidden');
+        });
 
         window.copyAccount = () => {
             const temp = document.createElement('textarea');
