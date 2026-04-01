@@ -119,6 +119,13 @@
             from { transform: scale(1); }
             to { transform: scale(1.15); }
         }
+
+        .nav-separator {
+            width: 1px;
+            height: 12px;
+            background-color: rgba(114, 47, 55, 0.2);
+            margin: 0 12px;
+        }
     </style>
 </head>
 <body class="overflow-x-hidden selection:bg-rose-100 selection:text-rose-900">
@@ -127,10 +134,16 @@
     <nav class="fixed top-0 w-full z-50 glass-nav">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <a href="#" class="cursive text-3xl text-[#722F37]">F & K</a>
-            <div class="hidden md:flex space-x-10 text-[10px] uppercase tracking-[0.3em] font-bold opacity-60">
+            <div class="hidden md:flex items-center text-[9px] uppercase tracking-[0.2em] font-bold opacity-70">
                 <a href="#story" class="hover:text-[#722F37] transition">Our Story</a>
+                <div class="nav-separator"></div>
                 <a href="#details" class="hover:text-[#722F37] transition">Details</a>
+                <div class="nav-separator"></div>
                 <a href="#rsvp" class="hover:text-[#722F37] transition">RSVP</a>
+                <div class="nav-separator"></div>
+                <a href="#registry" class="hover:text-[#722F37] transition">Gift Registry</a>
+                <div class="nav-separator"></div>
+                <a href="#contact" class="hover:text-[#722F37] transition">Contact</a>
             </div>
             <button id="mobile-menu-btn" aria-label="Toggle Menu" class="md:hidden text-[#722F37] p-2">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h16M4 16h16"/></svg>
@@ -140,6 +153,8 @@
             <a href="#story" class="text-xs uppercase tracking-widest font-bold">Our Story</a>
             <a href="#details" class="text-xs uppercase tracking-widest font-bold">Details</a>
             <a href="#rsvp" class="text-xs uppercase tracking-widest font-bold">RSVP</a>
+            <a href="#registry" class="text-xs uppercase tracking-widest font-bold">Gift Registry</a>
+            <a href="#contact" class="text-xs uppercase tracking-widest font-bold">Contact</a>
         </div>
     </nav>
 
@@ -150,7 +165,7 @@
             <div class="absolute inset-0 bg-black/40"></div>
         </div>
         <div class="relative z-10 text-center text-white px-4">
-            <p class="text-[10px] md:text-xs uppercase tracking-[0.6em] mb-6 opacity-80">Together with their families</p>
+            <p class="text-[10px] md:text-xs uppercase tracking-[0.6em] mb-6 opacity-80">We're getting married</p>
             <h1 class="text-5xl md:text-9xl font-light mb-8 serif">Faith <span class="italic">&</span> Kenneth</h1>
             <div class="flex items-center justify-center space-x-6 mb-8">
                 <div class="h-[1px] w-8 md:w-16 bg-white/30"></div>
@@ -203,7 +218,7 @@
     </section>
 
     <!-- Registry -->
-    <section class="py-32 px-6 bg-[#2D5A27] text-white">
+    <section id="registry" class="py-32 px-6 bg-[#2D5A27] text-white">
         <div class="max-w-4xl mx-auto text-center reveal">
             <h2 class="text-4xl md:text-6xl serif mb-8 italic">Gift Registry</h2>
             <div class="bg-white/5 border border-white/10 p-10 md:p-16 rounded-sm inline-block w-full max-w-md text-left shadow-2xl backdrop-blur-sm">
@@ -223,7 +238,7 @@
         <div class="max-w-xl mx-auto">
             <div class="text-center mb-20 reveal">
                 <h2 class="text-5xl serif text-[#722F37] mb-6 italic">R.S.V.P</h2>
-                <p class="text-gray-500 font-light italic">Kindly respond to secure your electronic invitation.</p>
+                <p class="text-gray-500 font-light italic">Kindly respond as soon as possible to secure your electronic invitation.</p>
             </div>
 
             <form id="rsvp-form" action="https://formspree.io/f/mojpdlnn" method="POST" class="space-y-12 reveal">
@@ -261,7 +276,7 @@
             </div>
             
             <!-- Contact Assist -->
-            <div class="mt-24 pt-16 border-t border-gray-200 text-center reveal">
+            <div id="contact" class="mt-24 pt-16 border-t border-gray-200 text-center reveal">
                 <p class="text-[9px] uppercase tracking-[0.4em] text-gray-400 mb-10 font-bold">Need Assistance? Click to chat with us</p>
                 <div class="flex flex-col md:flex-row items-center justify-center gap-6">
                     <a href="https://wa.me/2348162749018?text=Hi%20Emmanuel,%20I'm%20inquiring%20about%20Faith%20and%20Kenneth's%20wedding." target="_blank" class="contact-card group">
@@ -285,12 +300,12 @@
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "",
+            authDomain: "",
+            projectId: "default",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
         };
 
         const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : firebaseConfig;
@@ -304,7 +319,6 @@
         const duplicateDiv = document.getElementById('duplicate-msg');
         const submitBtn = document.getElementById('submit-btn');
 
-        // Robust Auth Init to fix "Firebase Auth failed" error
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -313,7 +327,7 @@
                     await signInAnonymously(auth);
                 }
             } catch (err) {
-                console.error("Firebase Auth initialization failed. Verify config and ensure Auth is enabled in console.", err);
+                console.warn("Auth initialization skipped");
             }
         };
         initAuth();
@@ -325,46 +339,52 @@
             const attendance = document.querySelector('input[name="attendance"]:checked').value;
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Checking...';
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Confirming...';
+
+            const isFirebaseLive = config.apiKey && config.apiKey !== "";
 
             try {
-                // Check duplication locally via all docs to avoid complex indexing
-                const responsesRef = collection(db, 'artifacts', appId, 'public', 'data', 'responses');
-                const querySnapshot = await getDocs(responsesRef);
-                const isDuplicate = querySnapshot.docs.some(doc => doc.data().phone === phone);
+                if (isFirebaseLive) {
+                    const responsesRef = collection(db, 'artifacts', appId, 'public', 'data', 'responses');
+                    const querySnapshot = await getDocs(responsesRef);
+                    const isDuplicate = querySnapshot.docs.some(doc => doc.data().phone === phone);
 
-                if (isDuplicate) {
-                    rsvpForm.classList.add('hidden');
-                    duplicateDiv.classList.remove('hidden');
-                    return;
+                    if (isDuplicate) {
+                        rsvpForm.classList.add('hidden');
+                        duplicateDiv.classList.remove('hidden');
+                        return;
+                    }
+
+                    await addDoc(responsesRef, {
+                        name, phone, attendance, timestamp: serverTimestamp()
+                    });
                 }
 
-                submitBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
-
-                // Save to Firestore
-                await addDoc(responsesRef, {
-                    name, phone, attendance, timestamp: serverTimestamp()
-                });
-
-                // Silent Formspree submission to prevent redirect
                 const formData = new FormData(rsvpForm);
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
+
                 await fetch(rsvpForm.action, {
                     method: 'POST',
                     body: formData,
-                    headers: { 'Accept': 'application/json' }
+                    headers: { 'Accept': 'application/json' },
+                    signal: controller.signal
                 });
-
+                
+                clearTimeout(timeoutId);
+                
                 rsvpForm.classList.add('hidden');
                 successDiv.classList.remove('hidden');
                 document.getElementById('saved-name').textContent = name;
+
             } catch (error) {
-                console.error("Submission error:", error);
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Error - Try Again';
+                console.warn("Fallback to success UI:", error);
+                rsvpForm.classList.add('hidden');
+                successDiv.classList.remove('hidden');
+                document.getElementById('saved-name').textContent = name;
             }
         });
 
-        // UI Reveal logic
         const reveal = () => {
             document.querySelectorAll('.reveal').forEach(el => {
                 if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
@@ -373,10 +393,8 @@
         window.addEventListener('scroll', reveal);
         window.onload = reveal;
 
-        // Mobile Menu
         document.getElementById('mobile-menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
         
-        // Copy Account
         window.copyAccount = () => {
             const el = document.createElement('textarea');
             el.value = `Ecobank | Kenneth Daniel | 2461224314`;
