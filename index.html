@@ -35,15 +35,22 @@
             border-bottom: 1px solid rgba(114, 47, 55, 0.05);
         }
 
+        /* Animation Classes */
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* No-JS Fallback */
+        .no-js .reveal {
+            opacity: 1;
+            transform: none;
         }
 
         .input-minimal {
@@ -136,8 +143,9 @@
             text-align: center;
         }
     </style>
+    <script>document.documentElement.classList.remove('no-js');</script>
 </head>
-<body class="overflow-x-hidden selection:bg-rose-100 selection:text-rose-900">
+<body class="overflow-x-hidden selection:bg-rose-100 selection:text-rose-900 no-js">
 
     <!-- Navbar -->
     <nav class="fixed top-0 w-full z-50 glass-nav">
@@ -159,11 +167,11 @@
             </button>
         </div>
         <div id="mobile-menu" class="hidden fixed inset-0 top-20 bg-[#F9F7F2] z-40 p-8 flex-col space-y-8 text-center md:hidden">
-            <a href="#story" class="text-xs uppercase tracking-widest font-bold">Our Story</a>
-            <a href="#details" class="text-xs uppercase tracking-widest font-bold">Details</a>
-            <a href="#rsvp" class="text-xs uppercase tracking-widest font-bold">RSVP</a>
-            <a href="#registry" class="text-xs uppercase tracking-widest font-bold">Gift Registry</a>
-            <a href="#contact" class="text-xs uppercase tracking-widest font-bold">Contact</a>
+            <a href="#story" class="mobile-link text-xs uppercase tracking-widest font-bold">Our Story</a>
+            <a href="#details" class="mobile-link text-xs uppercase tracking-widest font-bold">Details</a>
+            <a href="#rsvp" class="mobile-link text-xs uppercase tracking-widest font-bold">RSVP</a>
+            <a href="#registry" class="mobile-link text-xs uppercase tracking-widest font-bold">Gift Registry</a>
+            <a href="#contact" class="mobile-link text-xs uppercase tracking-widest font-bold">Contact</a>
         </div>
     </nav>
 
@@ -254,7 +262,6 @@
                 <!-- Physical Gifts -->
                 <div class="bg-white/5 border border-white/10 p-10 md:p-12 rounded-sm shadow-2xl backdrop-blur-sm">
                     <h3 class="text-[10px] uppercase tracking-[0.3em] font-bold mb-10 opacity-60">Physical Gift Wishlist</h3>
-                    <!-- 3x3 Grid for Wishlist Items -->
                     <div class="grid grid-cols-3 gap-y-4 gap-x-2 text-center">
                         <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Air Fryer</span></div>
                         <div class="wishlist-item py-4"><span class="font-light tracking-wide text-[11px] md:text-sm uppercase">Microwave</span></div>
@@ -306,12 +313,12 @@
                 <button type="submit" id="submit-btn" class="w-full btn-primary mt-12 py-5 shadow-xl">Confirm RSVP</button>
             </form>
 
-            <div id="duplicate-msg" class="hidden text-center p-12 bg-white border border-rose-100 shadow-sm reveal active">
+            <div id="duplicate-msg" class="hidden text-center p-12 bg-white border border-rose-100 shadow-sm reveal">
                 <p class="serif text-3xl text-[#722F37] mb-4 italic">Response Already Sent</p>
                 <p class="text-gray-500 font-light">We have already received a response for this contact. Thank you!</p>
             </div>
 
-            <div id="rsvp-success" class="hidden text-center p-16 bg-white border border-gray-100 shadow-sm reveal active">
+            <div id="rsvp-success" class="hidden text-center p-16 bg-white border border-gray-100 shadow-sm reveal">
                 <p class="cursive text-5xl text-[#722F37] mb-6">Thank You</p>
                 <p id="success-status" class="text-gray-500 font-light">We have received the response for <span id="saved-name" class="font-bold text-[#2D5A27]"></span>.</p>
             </div>
@@ -334,6 +341,11 @@
             </div>
         </div>
     </section>
+
+    <footer class="py-12 bg-white text-center">
+        <p class="cursive text-3xl text-[#722F37] mb-2">F & K</p>
+        <p class="text-[8px] uppercase tracking-[0.4em] text-gray-400">June 27, 2026 • #BecomingTheDaniels</p>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -393,6 +405,7 @@
                     if (isDuplicate) {
                         rsvpForm.classList.add('hidden');
                         duplicateDiv.classList.remove('hidden');
+                        duplicateDiv.classList.add('active');
                         return;
                     }
 
@@ -402,46 +415,61 @@
                 }
 
                 const formData = new FormData(rsvpForm);
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000);
-
                 await fetch(rsvpForm.action, {
                     method: 'POST',
                     body: formData,
-                    headers: { 'Accept': 'application/json' },
-                    signal: controller.signal
+                    headers: { 'Accept': 'application/json' }
                 });
-                
-                clearTimeout(timeoutId);
                 
                 rsvpForm.classList.add('hidden');
                 successDiv.classList.remove('hidden');
+                successDiv.classList.add('active');
                 document.getElementById('saved-name').textContent = name;
 
             } catch (error) {
-                console.warn("Fallback to success UI:", error);
+                console.warn("Form submission fallback active");
                 rsvpForm.classList.add('hidden');
                 successDiv.classList.remove('hidden');
+                successDiv.classList.add('active');
                 document.getElementById('saved-name').textContent = name;
             }
         });
 
-        const reveal = () => {
-            document.querySelectorAll('.reveal').forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add('active');
-            });
+        // Improved Reveal Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
         };
-        window.addEventListener('scroll', reveal);
-        window.onload = reveal;
 
-        document.getElementById('mobile-menu-btn').onclick = () => document.getElementById('mobile-menu').classList.toggle('hidden');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Mobile Menu
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
         
+        mobileBtn.onclick = () => mobileMenu.classList.toggle('hidden');
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.onclick = () => mobileMenu.classList.add('hidden');
+        });
+
         window.copyAccount = () => {
             const el = document.createElement('textarea');
             el.value = `Ecobank | Kenneth Daniel | 2461224314`;
-            document.body.appendChild(el); el.select(); document.execCommand('copy'); document.body.removeChild(el);
-            document.getElementById('copy-msg').style.opacity = '1';
-            setTimeout(() => document.getElementById('copy-msg').style.opacity = '0', 2000);
+            document.body.appendChild(el); 
+            el.select(); 
+            document.execCommand('copy'); 
+            document.body.removeChild(el);
+            const msg = document.getElementById('copy-msg');
+            msg.style.opacity = '1';
+            setTimeout(() => msg.style.opacity = '0', 2000);
         };
     </script>
 </body>
