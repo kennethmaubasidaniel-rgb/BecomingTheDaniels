@@ -522,7 +522,7 @@ formData.append("name", document.getElementById('guest-name').value);
 formData.append("phone", document.getElementById('guest-phone').value);
 formData.append("attendance", document.querySelector('input[name="attendance"]:checked').value);
 
-const response = await fetch("https://script.google.com/macros/s/AKfycbzdOuLH0XcMK-5xUSYUmODhedgU_Up6utbCnYKHxV9oqenbSOGCnhFT_JkkuXoOkblMLQ/exec", {
+const response = await fetch("https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbzdOuLH0XcMK-5xUSYUmODhedgU_Up6utbCnYKHxV9oqenbSOGCnhFT_JkkuXoOkblMLQ/exec", {
     method: "POST",
     body: formData
 });
