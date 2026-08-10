@@ -1,11 +1,11 @@
 <!DOCTYPE html> 
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faith & Kenneth | #BecomingTheDaniels</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&family=Montserrat:wght@200;300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -13,8 +13,11 @@
             --secondary: #2D5A27;
             --bg-light: #F9F7F2;
             --text-main: #2D2D2D;
-            --gold: #D4AF37;
-            --gold-dark: #aa820a;
+            --gold-light: #F5D061;
+            --gold-main: #D4AF37;
+            --gold-dark: #996515;
+            --envelope-bg: #FAF7F2;
+            --envelope-shadow: rgba(45, 20, 25, 0.18);
         }
 
         body {
@@ -47,20 +50,6 @@
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
-        }
-
-        .input-minimal {
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid #D1D1D1;
-            border-radius: 0;
-            padding: 0.75rem 0;
-            transition: all 0.3s;
-        }
-
-        .input-minimal:focus {
-            outline: none;
-            border-bottom-color: var(--accent);
         }
 
         .btn-primary {
@@ -113,19 +102,6 @@
             box-shadow: 0 20px 40px rgba(114, 47, 55, 0.08);
             border-color: var(--accent);
         }
-
-        .loading-spinner {
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 2px solid #fff;
-            width: 14px;
-            height: 14px;
-            animation: spin 0.8s linear infinite;
-            display: inline-block;
-            margin-right: 8px;
-        }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
 
         .contact-card {
             background: white;
@@ -182,273 +158,264 @@
             opacity: 0.7;
         }
 
-        /* ---------------------------------------------------- */
-        /* ENVELOPE OVERLAY & STYLES                            */
-        /* ---------------------------------------------------- */
-        #envelope-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background-color: #1a0a0c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1), visibility 1.2s;
-            perspective: 1200px;
+        #envelope-landing {
+            background: radial-gradient(circle at center, #FCFAFAF0 0%, #EFE9DE 100%), 
+                        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            perspective: 1500px;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s;
         }
 
-        .envelope-wrapper {
+        .envelope-container {
+            width: min(92vw, 520px);
+            height: min(65vw, 350px);
             position: relative;
-            width: 92%;
-            max-width: 550px;
-            height: 380px;
-            background: #fdfbf7;
-            border-radius: 8px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 100px rgba(114, 47, 55, 0.4);
-            transition: transform 1s ease-in-out, opacity 1s ease-in-out;
             transform-style: preserve-3d;
+            box-shadow: 0 35px 60px -15px var(--envelope-shadow),
+                        0 0 120px rgba(114, 47, 55, 0.08);
+            border-radius: 4px;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* Envelope Inner Pocket Lines */
-        .envelope-body {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #f7f3eb 0%, #eae3d2 100%);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #e2d7c3;
+        .envelope-paper {
+            background: #FAF7F2;
+            background-image: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(240,233,222,0.5) 100%);
+            box-shadow: inset 0 0 40px rgba(114, 47, 55, 0.03);
         }
 
-        .envelope-pocket-left {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 190px 0 0 275px;
-            border-color: transparent transparent transparent #f1ebd8;
-            filter: drop-shadow(2px -1px 3px rgba(0,0,0,0.08));
-        }
-
-        .envelope-pocket-right {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0 0 190px 275px;
-            border-color: transparent transparent #ede6d1 transparent;
-            filter: drop-shadow(-2px -1px 3px rgba(0,0,0,0.08));
-        }
-
-        .envelope-pocket-bottom {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0 275px 190px 275px;
-            border-color: transparent transparent #e4dcc7 transparent;
-            filter: drop-shadow(0 -3px 5px rgba(0,0,0,0.1));
-        }
-
-        /* Top Flap with 3D Flip */
-        .envelope-flap {
+        /* Flaps styling using SVG paths for crisp luxury edges */
+        .flap-top {
             position: absolute;
             top: 0;
             left: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 200px 275px 0 275px;
-            border-color: #ede5d0 transparent transparent transparent;
+            width: 100%;
+            height: 100%;
             transform-origin: top center;
             transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 30;
+            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.08));
+        }
+
+        .flap-top.open {
+            transform: rotateX(180deg);
             z-index: 10;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
         }
 
-        /* Invitation Card Peek inside envelope */
-        .card-preview {
+        .wax-seal-wrapper {
             position: absolute;
-            top: 20px;
-            left: 5%;
-            width: 90%;
-            height: 330px;
-            background: #fff;
-            border-radius: 4px;
-            border: 1px solid #d4af37;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            padding: 2.5rem 1.5rem;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
-            z-index: 5;
-        }
-
-        /* Golden Wax Seal Button */
-        .wax-seal {
-            position: absolute;
-            top: 170px;
+            top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(1);
-            width: 85px;
-            height: 85px;
-            background: radial-gradient(circle at 30% 30%, #ffd700, #d4af37 40%, #aa820a 70%, #664d00 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 6px 15px rgba(0,0,0,0.4),
-                inset 0 2px 4px rgba(255,255,255,0.6),
-                inset 0 -3px 6px rgba(0,0,0,0.5),
-                0 0 20px rgba(212, 175, 55, 0.5);
-            z-index: 20;
+            transform: translate(-50%, -15%);
+            z-index: 40;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #b89118;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            animation: pulse-seal 2.5s infinite alternate ease-in-out;
+            transition: transform 0.3s ease, opacity 0.6s ease;
         }
 
-        .wax-seal:hover {
-            transform: translate(-50%, -50%) scale(1.08);
-            box-shadow: 
-                0 10px 25px rgba(0,0,0,0.5),
-                inset 0 2px 6px rgba(255,255,255,0.8),
-                inset 0 -3px 6px rgba(0,0,0,0.6),
-                0 0 30px rgba(212, 175, 55, 0.8);
+        .wax-seal-wrapper:hover {
+            transform: translate(-50%, -15%) scale(1.06);
+        }
+
+        .wax-seal-wrapper:active {
+            transform: translate(-50%, -15%) scale(0.96);
+        }
+
+        .wax-seal {
+            width: 82px;
+            height: 82px;
+            background: radial-gradient(circle at 35% 35%, #F7E08B 0%, #D4AF37 35%, #996515 75%, #593902 100%);
+            border-radius: 50%;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.35),
+                        inset 0 3px 6px rgba(255, 255, 255, 0.6),
+                        inset 0 -4px 8px rgba(0, 0, 0, 0.5);
+            display: flex;
+            items-center: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .wax-seal::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 245, 200, 0.5);
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
         }
 
         .wax-seal-inner {
-            width: 68px;
-            height: 68px;
+            width: 62px;
+            height: 62px;
             border-radius: 50%;
-            border: 1.5px dashed rgba(255, 255, 255, 0.6);
+            background: radial-gradient(circle at 30% 30%, #E6C251 0%, #C5A059 50%, #7A530D 100%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: #3b2800;
-            text-shadow: 0 1px 1px rgba(255,255,255,0.4);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+            box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.5), 0 2px 5px rgba(0,0,0,0.3);
         }
 
-        @keyframes pulse-seal {
-            0% { box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 10px rgba(212, 175, 55, 0.3); }
-            100% { box-shadow: 0 8px 20px rgba(0,0,0,0.5), 0 0 25px rgba(212, 175, 55, 0.7); }
-        }
-
-        /* Opened Envelope State */
-        #envelope-overlay.opened .envelope-flap {
-            transform: rotateX(-180deg);
-            z-index: 1;
-        }
-
-        #envelope-overlay.opened .wax-seal {
-            opacity: 0;
-            pointer-events: none;
-            transform: translate(-50%, -50%) scale(0.5);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        #envelope-overlay.opened .card-preview {
-            transform: translateY(-160px) scale(1.05);
+        /* Invitation Card inside envelope */
+        .invitation-card {
+            position: absolute;
+            top: 6%;
+            left: 5%;
+            width: 90%;
+            height: 88%;
+            background: #FFFDF9;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-radius: 2px;
             z-index: 15;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            transition: transform 1.1s cubic-bezier(0.25, 1, 0.5, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            text-align: center;
         }
 
-        #envelope-overlay.opened {
-            opacity: 0;
-            visibility: hidden;
-            transition-delay: 1.1s;
+        .invitation-card.slide-up {
+            transform: translateY(-72%) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            z-index: 35;
         }
 
-        #envelope-overlay.opened .envelope-wrapper {
-            transform: translateY(120px) scale(0.9);
-            opacity: 0;
-            transition: transform 1.2s ease-in-out 0.4s, opacity 1s ease 0.5s;
+        /* Soft Pulse for Prompt */
+        @keyframes gentlePulse {
+            0%, 100% { opacity: 0.85; transform: translateY(0); }
+            50% { opacity: 0.4; transform: translateY(4px); }
         }
 
-        /* Custom Notification Toast replacing alert */
-        #toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #722F37;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 4px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            font-size: 12px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            z-index: 10000;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s ease;
-            pointer-events: none;
-            border-left: 4px solid #D4AF37;
+        .pulse-text {
+            animation: gentlePulse 2.5s infinite ease-in-out;
         }
 
-        #toast.show {
-            opacity: 1;
-            transform: translateY(0);
+        /* Gold metallic text effect */
+        .gold-text {
+            background: linear-gradient(135deg, #A87C2A 0%, #D4AF37 50%, #8A5A00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Gold foiled border accent for inner card */
+        .gold-border-inner {
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            outline: 1px solid rgba(212, 175, 55, 0.2);
+            outline-offset: 4px;
+        }
+
+        /* Custom luxury toast notification */
+        #custom-toast {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
     </style>
 </head>
-<body class="overflow-hidden">
+<body class="overflow-x-hidden">
 
-    <!-- ENVELOPE FRONT PAGE OVERLAY -->
-    <div id="envelope-overlay">
-        <!-- Background Ambient Glow -->
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(114,47,55,0.3)_0%,_transparent_70%)]"></div>
+    <div id="envelope-landing" class="fixed inset-0 z-[100] flex flex-col justify-between items-center py-10 px-4 overflow-hidden select-none">
+        
+        <!-- Header area on landing page -->
+        <div class="text-center z-10 mt-2 md:mt-6 transition-all duration-700" id="landing-header">
+            <p class="text-[9px] md:text-[11px] uppercase tracking-[0.4em] text-gray-500 font-medium mb-2">Together with their families</p>
+            <h1 class="text-3xl md:text-5xl serif font-light text-[#722F37] tracking-wide">
+                Faith <span class="italic text-2xl md:text-4xl gold-text">&</span> Kenneth
+            </h1>
+            <div class="h-[1px] w-12 bg-[#D4AF37]/40 mx-auto mt-3"></div>
+        </div>
 
-        <div class="envelope-wrapper">
-            <!-- Envelope Body Base -->
-            <div class="envelope-body"></div>
-
-            <!-- Card Inside Envelope -->
-            <div class="card-preview">
-                <p class="text-[9px] uppercase tracking-[0.4em] text-amber-700 font-bold mb-2">Cordially Invited To</p>
-                <h1 class="serif text-3xl text-[#722F37] italic font-medium mb-1">Faith & Kenneth</h1>
-                <p class="cursive text-xl text-[#2D5A27] mb-3">#BecomingTheDaniels</p>
-                <div class="h-px w-16 bg-amber-400/40 my-1"></div>
-                <p class="text-[10px] tracking-[0.25em] text-gray-500 uppercase mt-2">Saturday, June 27, 2026</p>
-                <p class="text-[9px] text-gray-400 mt-1 italic">Lagos, Nigeria</p>
+        <!-- Central Envelope Display -->
+        <div class="envelope-container envelope-paper relative my-auto">
+            
+            <!-- Invitation Card Inside Envelope -->
+            <div id="invitation-card" class="invitation-card gold-border-inner">
+                <p class="text-[8px] md:text-[10px] uppercase tracking-[0.3em] text-[#722F37] font-semibold mb-1">Honor Of Your Presence</p>
+                <h2 class="cursive text-2xl md:text-4xl text-[#722F37] my-1">Faith & Kenneth</h2>
+                <p class="text-[10px] md:text-xs font-light text-gray-600 tracking-widest uppercase my-1">Are Getting Married</p>
+                <div class="my-2 h-[1px] w-16 bg-[#D4AF37]/50"></div>
+                <p class="serif italic text-xs md:text-sm text-gray-700">Saturday, June 27, 2026</p>
+                <p class="text-[9px] tracking-widest uppercase text-gray-500 mt-1">Lagos, Nigeria</p>
             </div>
 
-            <!-- Envelope Pocket Layers -->
-            <div class="envelope-pocket-left"></div>
-            <div class="envelope-pocket-right"></div>
-            <div class="envelope-pocket-bottom"></div>
+            <!-- Envelope Back Wall Background -->
+            <div class="absolute inset-0 bg-[#F5F0E6] z-0 rounded-sm"></div>
 
-            <!-- Top Flap -->
-            <div class="envelope-flap"></div>
+            <!-- Envelope Left Flap -->
+            <svg class="absolute inset-0 w-full h-full z-20 pointer-events-none" viewBox="0 0 520 350" preserveAspectRatio="none">
+                <path d="M 0,0 L 260,175 L 0,350 Z" fill="#F4EFE6" stroke="rgba(114, 47, 55, 0.05)" stroke-width="1"/>
+                <path d="M 0,0 L 260,175 L 0,350 Z" fill="url(#leftGradient)" opacity="0.4"/>
+                <defs>
+                    <linearGradient id="leftGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+                        <stop offset="100%" stop-color="#D9CEBE" stop-opacity="0.3"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <!-- Envelope Right Flap -->
+            <svg class="absolute inset-0 w-full h-full z-20 pointer-events-none" viewBox="0 0 520 350" preserveAspectRatio="none">
+                <path d="M 520,0 L 260,175 L 520,350 Z" fill="#F0EAE0" stroke="rgba(114, 47, 55, 0.05)" stroke-width="1"/>
+                <path d="M 520,0 L 260,175 L 520,350 Z" fill="url(#rightGradient)" opacity="0.3"/>
+                <defs>
+                    <linearGradient id="rightGradient" x1="100%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+                        <stop offset="100%" stop-color="#CFC2B0" stop-opacity="0.4"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <!-- Envelope Bottom Flap -->
+            <svg class="absolute inset-0 w-full h-full z-25 pointer-events-none" viewBox="0 0 520 350" preserveAspectRatio="none">
+                <path d="M 0,350 L 260,165 L 520,350 Z" fill="#FAF6F0" stroke="rgba(114, 47, 55, 0.06)" stroke-width="1"/>
+                <path d="M 0,350 L 260,165 L 520,350 Z" fill="url(#bottomGradient)" opacity="0.5"/>
+                <defs>
+                    <linearGradient id="bottomGradient" x1="50%" y1="100%" x2="50%" y2="0%">
+                        <stop offset="0%" stop-color="#EFE8DC" stop-opacity="0.7"/>
+                        <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.1"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+
+            <!-- Envelope Top Triangular Flap (Foldable) -->
+            <div id="top-flap" class="flap-top">
+                <svg class="w-full h-full" viewBox="0 0 520 350" preserveAspectRatio="none">
+                    <path d="M 0,0 L 260,185 L 520,0 Z" fill="#FAF7F2" stroke="rgba(114, 47, 55, 0.08)" stroke-width="1"/>
+                    <path d="M 0,0 L 260,185 L 520,0 Z" fill="url(#topGradient)"/>
+                    <!-- Subtle Gold Trim on flap edge -->
+                    <path d="M 0,0 L 260,185 L 520,0" fill="none" stroke="url(#goldTrim)" stroke-width="1.5" opacity="0.7"/>
+                    <defs>
+                        <linearGradient id="topGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+                            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#EAE3D5" stop-opacity="0.9"/>
+                        </linearGradient>
+                        <linearGradient id="goldTrim" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.2"/>
+                            <stop offset="50%" stop-color="#F5D061" stop-opacity="0.9"/>
+                            <stop offset="100%" stop-color="#D4AF37" stop-opacity="0.2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
 
             <!-- Golden Wax Seal Button -->
-            <div class="wax-seal" id="wax-seal-btn" title="Click to open invitation">
-                <div class="wax-seal-inner">
-                    <span class="serif font-bold text-base tracking-widest leading-none">F&K</span>
-                    <span class="text-[7px] uppercase font-bold tracking-tighter opacity-80 mt-1">OPEN</span>
+            <div id="wax-seal-btn" class="wax-seal-wrapper" onclick="openEnvelope()" role="button" aria-label="Open Invitation">
+                <div class="wax-seal">
+                    <div class="wax-seal-inner">
+                        <span class="serif font-semibold text-xl md:text-2xl text-[#3D2500] tracking-tighter" style="text-shadow: 0.5px 0.5px 0px rgba(255,255,255,0.4);">F&K</span>
+                    </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- Hint Text Below Envelope -->
-        <div class="absolute bottom-12 text-center text-amber-100/70 text-xs tracking-[0.3em] uppercase font-light animate-pulse">
-            Click the Golden Seal to Unseal
+        <!-- Instruction below envelope -->
+        <div id="landing-footer" class="text-center z-10 mb-4 transition-all duration-700">
+            <p class="pulse-text text-[10px] md:text-xs uppercase tracking-[0.35em] text-[#722F37] font-semibold">
+                Tap the seal to open
+            </p>
         </div>
+
     </div>
 
-    <!-- NAVIGATION BAR -->
     <nav class="fixed top-0 w-full z-50 glass-nav">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
             <a href="#" class="cursive text-3xl text-[#722F37]">F & K</a>
@@ -465,9 +432,11 @@
                 <a href="#registry" class="hover:text-[#722F37] transition">Registry</a>
                 <span class="mx-4 text-gray-300">|</span>
                 <a href="#contact" class="hover:text-[#722F37] transition">Contact</a>
+                <span class="mx-4 text-gray-300">|</span>
+                <button onclick="reopenEnvelope()" class="hover:text-[#722F37] transition text-[#722F37] underline decoration-amber-400 decoration-2 underline-offset-4">View Invitation Envelope</button>
             </div>
 
-            <button id="mobile-menu-btn" class="md:hidden text-[#722F37]">
+            <button id="mobile-menu-btn" class="md:hidden text-[#722F37]" aria-label="Toggle Menu">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h16M4 16h16"/></svg>
             </button>
         </div>
@@ -480,11 +449,11 @@
                 <a href="#rsvp" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap">RSVP</a>
                 <a href="#registry" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap">Registry</a>
                 <a href="#contact" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap">Contact</a>
+                <button onclick="reopenEnvelope()" class="mobile-link text-[9px] uppercase tracking-widest font-bold whitespace-nowrap text-[#722F37]">Envelope View</button>
             </div>
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <header class="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover hero-zoom" alt="Wedding Hero">
@@ -509,7 +478,6 @@
         </div>
     </header>
 
-    <!-- WELCOME SECTION -->
     <section class="py-24 bg-white px-6">
         <div class="max-w-3xl mx-auto text-center reveal">
             <h2 class="text-4xl md:text-5xl serif text-[#722F37] mb-8 italic">Welcome</h2>
@@ -520,7 +488,6 @@
         </div>
     </section>
 
-    <!-- OUR STORY SECTION -->
     <section id="story" class="py-32 px-6">
         <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
             <div class="reveal">
@@ -539,7 +506,6 @@
         </div>
     </section>
 
-    <!-- DETAILS SECTION -->
     <section id="details" class="py-32 bg-white">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
@@ -582,7 +548,6 @@
         </div>
     </section>
 
-    <!-- ASO EBI SECTION -->
     <section id="asoebi" class="py-32 bg-[#F2F2F2] px-6">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16 reveal">
@@ -644,7 +609,6 @@
         </div>
     </section>
 
-    <!-- REGISTRY SECTION -->
     <section id="registry" class="py-32 px-6 bg-[#2D5A27] text-white">
         <div class="max-w-6xl mx-auto reveal">
             <div class="text-center mb-16">
@@ -681,7 +645,6 @@
         </div>
     </section>
 
-    <!-- RSVP & CONTACT SECTION -->
     <section id="rsvp" class="py-32 px-6 bg-[#F9F7F2]">
         <div class="max-w-xl mx-auto">
             <div class="text-center py-16 px-8 bg-white border border-gray-100 shadow-sm rounded-sm reveal active">
@@ -717,100 +680,151 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="py-12 bg-white text-center">
         <p class="cursive text-3xl text-[#722F37] mb-2">F & K</p>
         <p class="text-[8px] uppercase tracking-[0.4em] text-gray-400">June 27, 2026 • #BecomingTheDaniels</p>
     </footer>
 
-    <!-- Notification Toast Popup -->
-    <div id="toast">Account number copied to clipboard!</div>
+    <div id="custom-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-[#722F37] text-white px-6 py-3 rounded-full text-xs font-medium uppercase tracking-widest shadow-2xl opacity-0 pointer-events-none z-[200] transform translate-y-4">
+        Account number copied to clipboard!
+    </div>
 
-    <!-- JAVASCRIPT -->
     <script>
-        // Envelope Seal Unlocking Handler
-        const waxSealBtn = document.getElementById('wax-seal-btn');
-        const envelopeOverlay = document.getElementById('envelope-overlay');
+        let isOpening = false;
 
-        if (waxSealBtn && envelopeOverlay) {
-            waxSealBtn.addEventListener('click', () => {
-                // Trigger opening animation sequence
-                envelopeOverlay.classList.add('opened');
-                
-                // Allow page scrolling after animation finish
-                setTimeout(() => {
-                    document.body.classList.remove('overflow-hidden');
-                    
-                    // Trigger scroll reveals for initial viewport
-                    triggerScrollReveals();
-                }, 1200);
-            });
+        function openEnvelope() {
+            if (isOpening) return;
+            isOpening = true;
+
+            const waxSeal = document.getElementById('wax-seal-btn');
+            const topFlap = document.getElementById('top-flap');
+            const invitationCard = document.getElementById('invitation-card');
+            const landingPage = document.getElementById('envelope-landing');
+            const landingHeader = document.getElementById('landing-header');
+            const landingFooter = document.getElementById('landing-footer');
+
+            // Step 1: Wax seal click response animation
+            waxSeal.style.opacity = '0';
+            waxSeal.style.transform = 'translate(-50%, -15%) scale(1.3)';
+            waxSeal.style.pointerEvents = 'none';
+
+            // Step 2: Open envelope top flap
+            setTimeout(() => {
+                topFlap.classList.add('open');
+            }, 300);
+
+            // Step 3: Card slides up smoothly
+            setTimeout(() => {
+                invitationCard.classList.add('slide-up');
+            }, 800);
+
+            // Step 4: Hide text prompts gently
+            setTimeout(() => {
+                if (landingHeader) landingHeader.style.opacity = '0';
+                if (landingFooter) landingFooter.style.opacity = '0';
+            }, 1200);
+
+            // Step 5: Smoothly transition from landing overlay to main website
+            setTimeout(() => {
+                landingPage.style.opacity = '0';
+                landingPage.style.visibility = 'hidden';
+                document.body.classList.remove('overflow-hidden');
+            }, 2400);
         }
 
-        // Mobile Menu Navigation
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
+        function reopenEnvelope() {
+            const landingPage = document.getElementById('envelope-landing');
+            const waxSeal = document.getElementById('wax-seal-btn');
+            const topFlap = document.getElementById('top-flap');
+            const invitationCard = document.getElementById('invitation-card');
+            const landingHeader = document.getElementById('landing-header');
+            const landingFooter = document.getElementById('landing-footer');
 
-        if(mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            isOpening = false;
             
-            // Close mobile menu when links are clicked
-            document.querySelectorAll('.mobile-link').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                });
-            });
+            // Reset states
+            waxSeal.style.opacity = '1';
+            waxSeal.style.transform = 'translate(-50%, -15%) scale(1)';
+            waxSeal.style.pointerEvents = 'auto';
+            topFlap.classList.remove('open');
+            invitationCard.classList.remove('slide-up');
+            if (landingHeader) landingHeader.style.opacity = '1';
+            if (landingFooter) landingFooter.style.opacity = '1';
+
+            // Show overlay
+            landingPage.style.visibility = 'visible';
+            landingPage.style.opacity = '1';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Intersection Observer for scroll animations
-        function triggerScrollReveals() {
-            document.querySelectorAll('.reveal').forEach(el => {
-                if(el.getBoundingClientRect().top < window.innerHeight) {
-                    el.classList.add('active');
-                }
-            });
-        }
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-        // Toast notification helper
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            if(toast) {
-                toast.textContent = message;
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3500);
-            }
-        }
-
-        // Copy Account Details function (using execCommand for iframe safety)
+        // Copy Account function using sleek toast notification instead of alert
         function copyAccount() {
             const accountNumber = '2461224314';
+            
+            // Fallback clipboard method
             const tempInput = document.createElement('input');
             tempInput.value = accountNumber;
             document.body.appendChild(tempInput);
             tempInput.select();
-            tempInput.setSelectionRange(0, 99999); // Mobile compatibility
             
             try {
                 document.execCommand('copy');
-                showToast('Ecobank Account (2461224314) copied!');
+                showToast('Account number copied to clipboard!');
             } catch (err) {
-                showToast('Account Number: 2461224314');
+                showToast('Ecobank Account: 2461224314');
             }
-            
             document.body.removeChild(tempInput);
         }
+
+        function showToast(message) {
+            const toast = document.getElementById('custom-toast');
+            if (!toast) return;
+            toast.innerText = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            }, 3000);
+        }
+
+        // Mobile Menu toggle handler
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Close mobile menu on clicking any link
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mobileMenu) mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Intersection Observer for Scroll Reveals
+        window.onload = () => {
+            // Lock scrolling on initial load for landing page experience
+            document.querySelectorAll('.reveal').forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight) {
+                    el.classList.add('active');
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
